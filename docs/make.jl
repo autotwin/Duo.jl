@@ -22,4 +22,5 @@ makedocs(;
 deploydocs(;
     repo="github.com/autotwin/Duo.jl",
     devbranch="main",
+    devurl="latest",
 )
