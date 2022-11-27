@@ -1,6 +1,6 @@
 module Duo
 
-import Base: contains
+import Base: contains, parent
 # Want `import` to have it in my local scope so that I can add a new method to Base: contains
 
 """Refactor of 2D dualization in Python
@@ -11,7 +11,7 @@ https://github.com/sandialabs/sibl/blob/b7ea9686fb9a7895018f0154e04aa67df5a902a3
 # Documentation refernce:
 # https://docs.julialang.org/en/v1/manual/documentation/
 
-export greeting, Point2D, Cell2D, contains, extents
+export greeting, Point2D, Cell2D, contains, extents, has_children, children, parent, divide!
 
 """
     Point2D
@@ -142,16 +142,18 @@ function divide!(cell::Cell2D)
     south = cell.center.y - cell.size / 4.0 # y coordinate
     north = cell.center.y + cell.size / 4.0 # y coordinate
 
+    sw = Point2D(west, south)
+    se = Point2D(east, south)
+    ne = Point2D(east, north)
+    nw = Point2D(west, north)
+
     child_size = cell.size / 2.0
     child_level = cell.level + 1
 
-    child_sw = Cell2D(Point2D(west, south), child_size, child_level, cell, nothing)
-
-    child_se = Cell2D(Point2D(east, south), child_size, child_level, cell, nothing)
-
-    child_ne = Cell2D(Point2D(east, north), child_size, child_level, cell, nothing)
-
-    child_nw = Cell2D(Point2D(west, north), child_size, child_level, cell, nothing)
+    child_sw = Cell2D(sw, child_size, child_level, cell, nothing)
+    child_se = Cell2D(se, child_size, child_level, cell, nothing)
+    child_ne = Cell2D(ne, child_size, child_level, cell, nothing)
+    child_nw = Cell2D(nw, child_size, child_level, cell, nothing)
 
     # mutate the parent cell
     return cell.children = [child_sw, child_se, child_ne, child_nw]

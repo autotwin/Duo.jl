@@ -20,10 +20,7 @@ using Duo
     |     *-----------*
     """
 
-    aa = (x=2.0, y=0.0)
-    pt = Point2D(aa[1], aa[2])
-    @test aa[1] == pt.x
-    @test aa[2] == pt.y
+    pt = Point2D(2.0, 0.0)
 
     root = Cell2D(pt, 2.0)
     @test root.center == pt
@@ -64,45 +61,43 @@ using Duo
         # https://docs.julialang.org/en/v1/base/base/#Core.:===
 
         # @test duo.parent(root) === nothing
-        @test Duo.parent(root) |> isnothing
+        @test isnothing(parent(root))
 
         # @test children(root) === nothing
-        @test Duo.children(root) |> isnothing
+        @test isnothing(children(root))
 
         @test Duo.has_children(root) == false
 
         @test Duo.is_root(root)
 
         # grow hierarchy by one level
-        Duo.divide!(root)
+        divide!(root)
         @test root.level == 0
-        @test Duo.has_children(root)
-        sw, se, ne, nw = Duo.children(root)
+        @test has_children(root)
+        sw, se, ne, nw = children(root)
 
         @test sw.center == Point2D(1.5, -0.5)
         @test sw.size == 1.0
         @test sw.level == 1
         @test sw.parent === root
-        @test sw.children |> isnothing
+        @test isnothing(sw.children)
 
         @test se.center == Point2D(2.5, -0.5)
         @test se.size == 1.0
         @test se.level == 1
         @test se.parent === root
-        @test se.children |> isnothing
+        @test isnothing(se.children)
 
         @test ne.center == Point2D(2.5, 0.5)
         @test ne.size == 1.0
         @test ne.level == 1
         @test ne.parent === root
-        @test ne.children |> isnothing
+        @test isnothing(ne.children)
 
         @test nw.center == Point2D(1.5, 0.5)
         @test nw.size == 1.0
         @test nw.level == 1
         @test nw.parent === root
-        @test nw.children |> isnothing
-
+        @test isnothing(nw.children)
     end # hierarchy
-
 end # Duo.jl
