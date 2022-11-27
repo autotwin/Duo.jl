@@ -9,4 +9,5 @@
 ## References
 
 * [AbstractTrees.jl](https://github.com/JuliaCollections/AbstractTrees.jl)
+* [Quadtrees.jl](https://github.com/jorge-brito/Quadtrees.jl/blob/main/src/Quadtrees.jl)
 * [RegionTrees.jl](https://github.com/rdeits/RegionTrees.jl)
