@@ -1,0 +1,243 @@
+Four ways to create a Julia Package.
+Chad was cross-contaminating with these four approaches.
+Do NOT start with the repo on the GitHub remote.
+Delete all existing autotwin repos and start fresh.
+Use Anirudh's setup-jl instead, which assumes there is no existing remote repo.
+
+From https://github.com/anirudh2/setup-jl
+
+$ git clone https://github.com/anirudh2/setup-jl.git
+
+Usage
+
+Clone this repository.
+
+Instantiate the project (download the dependencies) by running 
+$ cd ~/setup-jl
+$ julia --project -e 'import Pkg; Pkg.instantiate()'  # installs PkgTemplates and Git, if not already present
+
+cbh@Atlas/Users/cbh/setup-jl> julia --project -e 'import Pkg; Pkg.instantiate()'                                                                                                                                                                        (b
+   Installed Git ────────────── v1.2.1  # The just Package Git, not command line Git
+   Installed InlineStrings ──── v1.2.2
+   Installed GitForge ───────── v0.4.1
+   Installed CompatHelper ───── v3.5.0
+   Installed Git_jll ────────── v2.34.1+0
+   Installed MultilineStrings ─ v0.1.1
+  Downloaded artifact: Git
+Precompiling project...
+  7 dependencies successfully precompiled in 5 seconds. 43 already precompiled.
+cbh@Atlas/Users/cbh/setup-jl>
+
+
+Create an empty repository with the correct path on GitHub.
+On remote, at https://github.com/autotwin, create a new repo called Duo.jl
+(must start with upper CamelCase  and include the .jl ending, for convention and integration with Julia Package Registry, for guidelines with automerging)
+Also, do not add README, .gitignore, and LICENSE.  Just make an empty Public (or possibly Private) repo.
+
+Ignore the second screen, bc CBH will set up all these files and config manually.
+
+Modify config.toml to match your preferences.  -> Copy to config_autotwin_duo.toml, and modify the latter file.
+
+Run the script with 
+cbh@Atlas/Users/cbh/setup-jl> $ julia --project -e 'include("setup.jl"); createpackage("config_autotwin_duo.toml")'. This will populate that empty repo automatically.
+
+Anirudh's opinion that Yubikey should be used:
+[ Info: Creating Package
+[ Info: Running prehooks
+error: cannot run gpg: No such file or directory
+error: gpg failed to sign the data
+fatal: failed to write commit object
+ERROR: failed process: Process(`git -C /Users/cbh/projects/Duo commit -S --allow-empty -m 'Initial commit'`, ProcessExited(128)) [128]
+
+Stacktrace:
+  [1] pipeline_error
+    @ ./process.jl:565 [inlined]
+  [2] run(::Base.CmdRedirect; wait::Bool)
+    @ Base ./process.jl:480
+  [3] run
+    @ ./process.jl:477 [inlined]
+  [4] commit(p::Git, repo::LibGit2.GitRepo, pkg_dir::String, msg::String)
+    @ PkgTemplates ~/.julia/packages/PkgTemplates/j2sNk/src/plugins/git.jl:122
+  [5] (::PkgTemplates.var"#71#74"{Git, Template, String})(repo::LibGit2.GitRepo)
+    @ PkgTemplates ~/.julia/packages/PkgTemplates/j2sNk/src/plugins/git.jl:68
+  [6] with(f::PkgTemplates.var"#71#74"{Git, Template, String}, obj::LibGit2.GitRepo)
+    @ LibGit2 /opt/homebrew/Cellar/julia/1.8.2/share/julia/stdlib/v1.8/LibGit2/src/types.jl:1159
+  [7] prehook
+    @ ~/.julia/packages/PkgTemplates/j2sNk/src/plugins/git.jl:61 [inlined]
+  [8] (::PkgTemplates.var"#17#20"{typeof(PkgTemplates.prehook), Template, String})(p::Git)
+    @ PkgTemplates ~/.julia/packages/PkgTemplates/j2sNk/src/template.jl:132
+  [9] foreach(f::PkgTemplates.var"#17#20"{typeof(PkgTemplates.prehook), Template, String}, itr::Vector{PkgTemplates.Plugin})
+    @ Base ./abstractarray.jl:2774
+ [10] (::PkgTemplates.var"#16#19"{Template, String})(h::typeof(PkgTemplates.prehook))
+    @ PkgTemplates ~/.julia/packages/PkgTemplates/j2sNk/src/template.jl:131
+ [11] (::Base.var"#57#58"{PkgTemplates.var"#16#19"{Template, String}})(#unused#::Nothing, x::Function)
+    @ Base ./tuple.jl:555
+ [12] BottomRF
+    @ ./reduce.jl:81 [inlined]
+ [13] afoldl
+    @ ./operators.jl:548 [inlined]
+ [14] _foldl_impl
+    @ ./tuple.jl:277 [inlined]
+ [15] foldl_impl
+    @ ./reduce.jl:48 [inlined]
+ [16] mapfoldl_impl
+    @ ./reduce.jl:44 [inlined]
+ [17] #mapfoldl#259
+    @ ./reduce.jl:170 [inlined]
+ [18] #foldl#260
+    @ ./reduce.jl:193 [inlined]
+ [19] foreach
+    @ ./tuple.jl:555 [inlined]
+ [20] (::Template)(pkg::String)
+    @ PkgTemplates ~/.julia/packages/PkgTemplates/j2sNk/src/template.jl:129
+ [21] createpackage(; name::String, user::String, authors::String, julia::VersionNumber, dir::String, license::String)
+    @ Main ~/setup-jl/setup.jl:91
+ [22] createpackage(path::String)
+    @ Main ~/setup-jl/setup.jl:48
+ [23] top-level scope
+    @ none:1
+cbh@Atlas/Users/cbh/setup-jl>
+
+
+Edit the config_autotwin_duo.toml, add this line
+usegpg = false  # Whether to require signed commits
+
+
+cbh@Atlas/Users/cbh/setup-jl> $ julia --project -e 'include("setup.jl"); createpackage("config_autotwin_duo.toml")'. This will populate that empty repo automatically.
+
+
+From https://github.com/anirudh2/setup-jl
+   c9c5da9..eb544d7  main       -> origin/main
+Updating c9c5da9..eb544d7
+Fast-forward
+ setup.jl | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+cbh@Atlas/Users/cbh/setup-jl> julia --project -e 'include("setup.jl"); createpackage("config_autotwin_duo.toml")'      (base)
+[ Info: Creating Package
+[ Info: Running prehooks
+[ Info: Running hooks
+  Activating new project at `~/autotwin/Duo/test`
+    Updating registry at `~/.julia/registries/General.toml`
+   Resolving package versions...
+    Updating `~/autotwin/Duo/test/Project.toml`
+  [8dfed614] + Test
+    Updating `~/autotwin/Duo/test/Manifest.toml`
+  [2a0f44e3] + Base64
+  [b77e0a4c] + InteractiveUtils
+  [56ddb016] + Logging
+  [d6f4376e] + Markdown
+  [9a3f8284] + Random
+  [ea8e919c] + SHA v0.7.0
+  [9e88b42a] + Serialization
+  [8dfed614] + Test
+  Activating project at `~/setup-jl`
+  Activating new project at `~/autotwin/Duo/docs`
+   Resolving package versions...
+    Updating `~/autotwin/Duo/docs/Project.toml`
+  [e30172f5] + Documenter v0.27.23
+    Updating `~/autotwin/Duo/docs/Manifest.toml`
+  [a4c015fc] + ANSIColoredPrinters v0.0.1
+  [ffbed154] + DocStringExtensions v0.9.2
+  [e30172f5] + Documenter v0.27.23
+  [b5f81e59] + IOCapture v0.2.2
+  [682c06a0] + JSON v0.21.3
+  [69de0a69] + Parsers v2.5.1
+  [66db9d55] + SnoopPrecompile v1.0.1
+  [2a0f44e3] + Base64
+  [ade2ca70] + Dates
+  [b77e0a4c] + InteractiveUtils
+  [76f85450] + LibGit2
+  [56ddb016] + Logging
+  [d6f4376e] + Markdown
+  [a63ad114] + Mmap
+  [ca575930] + NetworkOptions v1.2.0
+  [de0858da] + Printf
+  [3fa0cd96] + REPL
+  [9a3f8284] + Random
+  [ea8e919c] + SHA v0.7.0
+  [9e88b42a] + Serialization
+  [6462fe0b] + Sockets
+  [8dfed614] + Test
+  [4ec0a83e] + Unicode
+   Resolving package versions...
+    Updating `~/autotwin/Duo/docs/Project.toml`
+  [f81fcab0] + Duo v0.1.0 `..`
+    Updating `~/autotwin/Duo/docs/Manifest.toml`
+  [f81fcab0] + Duo v0.1.0 `..`
+  Activating project at `~/setup-jl`
+[ Info: Running posthooks
+[ Info: New package is at /Users/cbh/autotwin/Duo
+[ Info: Copying Relevant Files To Package Repo
+[ Info: Correcting initial version
+[ Info: Setting correct devurl for Documentation
+[ Info: Setting git repo for semantic release
+[ Info: Setting up coveralls
+[ Info: Setting permissions for compathelper
+[ Info: Appending post-setup instructions to README
+[ Info: Creating initial commit and tag
+┌ Warning: This will fail if you have not created the upstream repo on GitHub at the correct URL.
+└ @ Main ~/setup-jl/setup.jl:166
+┌ Warning: You must also have gpg commit signing set up.
+└ @ Main ~/setup-jl/setup.jl:167
+cbh@Atlas/Users/cbh/setup-jl>
+
+
+Follow the instructions in the newly created ~/autotwin/Duo/README.md to finish setting the repo up.
+
+Push to remote:
+cbh@Atlas/Users/cbh/autotwin/Duo> git remote -v                                                                         (base)
+origin	git@github.com:autotwin/Duo.jl.git (fetch)
+origin	git@github.com:autotwin/Duo.jl.git (push)
+cbh@Atlas/Users/cbh/autotwin/Duo> git push                                                                              (base)
+fatal: The current branch main has no upstream branch.
+To push the current branch and set the remote as upstream, use
+
+    git push --set-upstream origin main
+
+To have this happen automatically for branches without a tracking
+upstream, see 'push.autoSetupRemote' in 'git help config'.
+
+cbh@Atlas/Users/cbh/autotwin/Duo> git push --set-upstream origin main
+
+Rerun:
+
+Delete the Remote so that it is empty
+Create a new Duo.jl on remote
+Delete ~/autotwin/Duo
+Then
+
+cbh@Atlas/Users/cbh/setup-jl> $ julia --project -e 'include("setup.jl"); createpackage("config_autotwin_duo.toml")'. This will populate that empty repo automatically.
+
+On autotwin/Duo.jl remote
+Click the Coveralls link in line 1 of the README.md
+
+Sign into Coveralls webpage with GitHub account credentials
+Organizational access: give access to autotwin
+Authorize lemurheavy
+
+Look at CI.yml, permissions, with explicity GITHUB token scope.
+
+Add some repos button
+
+settings of autotwin/Duo.jl, General, Pages, Branch set to 'gh-pages' so that documentation is automatically built to this branch.
+
+
+
+https://github.com/semantic-release/semantic-release
+
+No need to manually update https://github.com/autotwin/Duo.jl/blob/main/CHANGELOG.md
+As this log will be automatically updated when the version increments.
+
+https://github.com/autotwin/Duo.jl/blob/main/.github/workflows/dco_check.yml
+assures that PRs submitted by others is a way to make sure the person generating the PR is actually written by them.
+
+
+Patel gives me his `startup.jl` file.
+On local 
+~/.julia
+mkdir config
+cp ~/Downloads/startup.jl ~/.julia/config
+edit the startup.jl from emacs to vim
+restart the Julia REPL
+
+
