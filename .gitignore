@@ -3,3 +3,9 @@
 *.jl.mem
 /Manifest.toml
 /docs/build/
+
+*.swp
+
+# Ignore macOS database files
+.DS_Store
+
