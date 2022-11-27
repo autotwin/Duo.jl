@@ -2,7 +2,6 @@ module Duo
 
 import Base: contains
 # Want `import` to have it in my local scope so that I can add a new method to Base: contains
-# Two ways to extend Base.contains without imp
 
 
 """Refactor of 2D dualization in Python
