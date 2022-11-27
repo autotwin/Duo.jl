@@ -3,7 +3,6 @@ module Duo
 import Base: contains
 # Want `import` to have it in my local scope so that I can add a new method to Base: contains
 
-
 """Refactor of 2D dualization in Python
 Reference:
 https://github.com/sandialabs/sibl/blob/b7ea9686fb9a7895018f0154e04aa67df5a902a3/geo/src/ptg/quadtree.py#L12
@@ -23,7 +22,6 @@ struct Point2D
     x::Real
     y::Real
 end
-
 
 """
     Cell2D
@@ -68,7 +66,7 @@ end
 """
     contains(cell, point)
 
-Determines if the coordinates of a `point` lie on or within the boundary of a `cell``.
+Determines if the coordinates of a `point` lie on or within the boundary of a `cell`.
 
 Returns `true` if the point is on the boundary of the cell or in
 the interior of the cell; `false` otherwise.
@@ -98,7 +96,7 @@ Get the parent cell of the current subject cell `cell`.
 
 Get the children (cells) of the current subject cell `cell`.
 
-Prior to cell division, a cell has no children.
+Prior to cell division, the cell has no children.
 After cell division in 2D, the cell has exactly four children.
 After cell division in 3D, the cell has exactly eight children.
 """
@@ -107,7 +105,7 @@ After cell division in 3D, the cell has exactly eight children.
 """
     has_children(cell)
 
-Whether the subject cell `cell` has children or not.  Returns `true` if
+Whether or not the subject `cell` has children.  Returns `true` if
 the cell has children; `false` if the cell has no children.
 """
 @inline has_children(cell::Cell2D) = !(children(cell) === nothing)
@@ -115,7 +113,7 @@ the cell has children; `false` if the cell has no children.
 """
     is_root(cell)
 
-Whether or not the subject cell `cell` is the root of the cell hierarchy.
+Whether or not the subject `cell` is the root of the cell hierarchy.
 Returns `true` if the cell is the root; `false` otherwise.
 """
 @inline is_root(cell::Cell2D) = (cell.level == 0) && (isnothing(cell.parent))
@@ -130,7 +128,6 @@ function extents(cell::Cell2D)
     xmin, xmax, ymin, ymax = _bounds(cell)
     return ((xmin, ymin), (xmax, ymax))
 end
-
 
 """
     divide!(cell)
@@ -148,27 +145,21 @@ function divide!(cell::Cell2D)
     child_size = cell.size / 2.0
     child_level = cell.level + 1
 
-    child_sw = Cell2D(
-        Point2D(west, south), child_size, child_level, cell, nothing
-    )
+    child_sw = Cell2D(Point2D(west, south), child_size, child_level, cell, nothing)
 
-    child_se = Cell2D(
-        Point2D(east, south), child_size, child_level, cell, nothing
-    )
+    child_se = Cell2D(Point2D(east, south), child_size, child_level, cell, nothing)
 
     child_ne = Cell2D(Point2D(east, north), child_size, child_level, cell, nothing)
 
     child_nw = Cell2D(Point2D(west, north), child_size, child_level, cell, nothing)
 
     # mutate the parent cell
-    cell.children = [child_sw, child_se, child_ne, child_nw]
+    return cell.children = [child_sw, child_se, child_ne, child_nw]
 end
-
 
 # Write your package code here.
 function greeting()
     return "Hello Julia!"
 end
-
 
 end # module duo
