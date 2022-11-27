@@ -13,3 +13,6 @@
 1. Go to [Coveralls](https://coveralls.io/) and activate this repo.
 2. Once CI finishes running for the first time, go to Settings, Pages, and select the branch `gh-pages`
 3. Once you've done these things, delete this TODO section and commit the change with the message `chore: finished repo setup`
+
+Not necessary to delete these items above.
+
