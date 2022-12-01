@@ -14,15 +14,16 @@ using Duo
     y
     ^
     |     *-----------*
-    |     |           |
+    |     |  x     x  |
     *-----1-----2-----3-----4--> x
-    |     |           |
+    |     |  x     x  |
     |     *-----------*
     """
 
     pt = Point2D(2.0, 0.0)
+    inscribed_diameter = 2.0
 
-    root = Cell2D(pt, 2.0)
+    root = Cell2D(pt, inscribed_diameter)
     @test root.center == pt
     @test root.size == 2.0
 
@@ -92,12 +93,18 @@ using Duo
         @test ne.size == 1.0
         @test ne.level == 1
         @test ne.parent === root
-        @test isnothing(ne.children)
+        # @test isnothing(ne.children)
+        @test ne.children |> isnothing
 
         @test nw.center == Point2D(1.5, 0.5)
         @test nw.size == 1.0
         @test nw.level == 1
         @test nw.parent === root
         @test isnothing(nw.children)
+
+        # Testing and implementation of divide!
+        # see
+        # https://github.com/JuliaLang/julia/issues/269#issuecomment-441829356
+
     end # hierarchy
 end # Duo.jl
