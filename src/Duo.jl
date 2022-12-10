@@ -136,18 +136,31 @@ Causes the `cell` to undergo cell division.  In 2D, causes the current
 subject cell to have four children.
 """
 function divide!(cell::Cell2D)
-    west = cell.center.x - cell.size / 4.0  # x coordinate
-    east = cell.center.x + cell.size / 4.0  # x coordinate
+    # (X, Y) are the coordinates of the center of the cell, with inscribed
+    # circle metric of radius R.
+    X = cell.center.x
+    Y = cell.center.y
+    R = cell.size / 2.0  # cell.size is equivalent to inscribed diameter
 
-    south = cell.center.y - cell.size / 4.0 # y coordinate
-    north = cell.center.y + cell.size / 4.0 # y coordinate
+    # Four new cells are created in each of the four corners,
+    # southwest, southeast, northeast, and northwest, 
+    # with new radius that is half of the parent radius, and four
+    # centers located in the inscribed circle center of each of the sw,
+    # se, ne, and nw child cells.
+    r = R / 2.0
+
+    west = X - r # x coordinate
+    east = X + r # x coordinate
+
+    south = Y - r # y coordinate
+    north = Y + r # y coordinate
 
     sw = Point2D(west, south)
     se = Point2D(east, south)
     ne = Point2D(east, north)
     nw = Point2D(west, north)
 
-    child_size = cell.size / 2.0
+    child_size = R
     child_level = cell.level + 1
 
     child_sw = Cell2D(sw, child_size, child_level, cell, nothing)
